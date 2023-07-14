@@ -1,4 +1,4 @@
-const baseUrl = "http://44.204.76.209:3000/expenses";
+const baseUrl = "http://3.86.101.165:3000";
 
 const msg = document.getElementById("message");
 const form = document.getElementById("addExpense");
@@ -31,20 +31,17 @@ logout.addEventListener("click", () => {
 
 document.getElementById("premium-btn").addEventListener("click", async (e) => {
   const token = localStorage.getItem("token");
-  const response = await axios.get(
-    "http://44.204.76.209:3000/purchase/premiummembership",
-    {
-      headers: {
-        Authentication: token,
-      },
-    }
-  );
+  const response = await axios.get(`${baseUrl}/purchase/premiummembership`, {
+    headers: {
+      Authentication: token,
+    },
+  });
   var options = {
     key: response.data.key_id,
     order_id: response.data.order.id,
     handler: async function (response) {
       const result = await axios.post(
-        "http://44.204.76.209:3000/purchase/updatetransactionstatus",
+        `${baseUrl}/purchase/updatetransactionstatus`,
         {
           order_id: options.order_id,
           payment_id: response.razorpay_payment_id,
@@ -67,7 +64,7 @@ document.getElementById("premium-btn").addEventListener("click", async (e) => {
     console.log(response);
 
     await axios.post(
-      "http://44.204.76.209:3000/purchase/updatetransactionstatus",
+      `${baseUrl}/purchase/updatetransactionstatus`,
       {
         order_id: options.order_id,
         sucess: false,
@@ -123,9 +120,7 @@ const displayLeaderboard = (user) => {
 const getLeaderboard = async (e) => {
   leaderboardList.replaceChildren();
   try {
-    const response = await axios.get(
-      "http://44.204.76.209:3000/premium/showLeaderboards"
-    );
+    const response = await axios.get(`${baseUrl}/premium/showLeaderboards`);
     leaderboardDiv.style.display = "block";
     const leaderboard = response.data;
     leaderboard.forEach((user, index) => {
@@ -299,7 +294,7 @@ const submitHandler = async (e) => {
     category: category.value,
   };
   try {
-    const exp = await axios.post(`${baseUrl}/add-expense`, expList, {
+    const exp = await axios.post(`${baseUrl}/expenses/add-expense`, expList, {
       headers: { Authentication: token },
     });
     console.log(exp.data);
@@ -332,22 +327,16 @@ const deleteHandler = async (e) => {
 
 const downloadManager = async (e) => {
   try {
-    const result = await axios.get(
-      "http://44.204.76.209:3000/expenses/download",
-      {
-        headers: { Authentication: token },
-      }
-    );
+    const result = await axios.get(`${baseUrl}/expenses/download`, {
+      headers: { Authentication: token },
+    });
     if (result.status === 201) {
       const a = document.createElement("a");
       a.href = result.data.fileUrl;
       a.click();
-      response = await axios.get(
-        "http://44.204.76.209:3000/expenses/filedownloads",
-        {
-          headers: { Authentication: token },
-        }
-      );
+      response = await axios.get(`${baseUrl}/expenses/filedownloads`, {
+        headers: { Authentication: token },
+      });
       const files = JSON.parse(response.data.files);
       fileDownloadDiv.style.display = "block";
       files.forEach((file) => displayFiles(file));

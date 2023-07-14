@@ -1,3 +1,5 @@
+const baseUrl = "http://3.86.101.165:3000";
+
 const form = document.getElementById("forgotPasswordForm");
 const msg = document.getElementById("message");
 
@@ -21,7 +23,7 @@ const submitHandler = async (e) => {
     };
     try {
       const response = await axios.post(
-        `http://44.204.76.209:3000/password/forgotpassword`,
+        `${baseUrl}/password/forgotpassword`,
         userDetails
       );
       const data = response.data;
