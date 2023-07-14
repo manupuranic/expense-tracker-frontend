@@ -29,7 +29,7 @@ const loginHandler = async (e) => {
       messageHandler(data.message, "success");
       localStorage.setItem("token", data.token);
       localStorage.setItem("perPage", 5);
-      window.location.href = "../expenses/expenses.html";
+      window.location.href = "../index.html";
       email.value = "";
       password.value = "";
     } catch (err) {
